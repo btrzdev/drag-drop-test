@@ -11,10 +11,14 @@
   "dependencies": {
     "@formkit/drag-and-drop": "^0.0.38",
     "html-react-parser": "^5.1.10",
+    "html-to-image": "^1.11.11",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.1",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18",
-    "react-hook-form": "^7.51.4"
+    "react-hook-form": "^7.51.4",
+    "react-pdf-html": "^2.0.4"
   },
   "devDependencies": {
     "@types/node": "^20",

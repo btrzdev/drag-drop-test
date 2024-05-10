@@ -1,11 +1,12 @@
-import Image from "next/image";
+"use client";
 import { Inter } from "next/font/google";
 import { useDragAndDrop } from "@formkit/drag-and-drop/react";
 import { useForm } from "react-hook-form";
-import { Children, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import React from "react";
-import parse, { domToReact } from "html-react-parser";
+import parse from "html-react-parser";
 import Template from "../components/Template";
+
 const inter = Inter({ subsets: ["latin"] });
 
 const SUBJECT = [
@@ -36,7 +37,6 @@ export default function Home() {
   const {
     register,
     handleSubmit,
-    getValues,
     formState: { errors },
   } = useForm();
   const onSubmit = (data: any) => {
@@ -51,7 +51,7 @@ export default function Home() {
     }
   };
 
-  const [parent, tapes] = useDragAndDrop<HTMLFormElement>([
+  const [parent, inputs] = useDragAndDrop<HTMLFormElement>([
     <label className="flex flex-col hover:cursor-grab text-white" id="label">
       Subject
       <select
@@ -93,31 +93,20 @@ export default function Home() {
 
   const options = {
     replace({ attribs, children }) {
-      if (attribs && attribs.name === "session") {
+      if (
+        (attribs && attribs.name === "session") ||
+        (attribs && attribs.name === "message") ||
+        (attribs && attribs.name === "subject")
+      ) {
         return (
           <div
-            className={attribs.class}
-            style={{ backgroundColor: "white", color: "black" }}
-          >
-            {renderFieldValue(attribs.name)}
-          </div>
-        );
-      }
-      if (attribs && attribs.name === "message") {
-        return (
-          <div
-            className={`${attribs.class}`}
-            style={{ backgroundColor: "white", color: "black" }}
-          >
-            {renderFieldValue(attribs.name)}
-          </div>
-        );
-      }
-      if (attribs && attribs.name === "subject") {
-        return (
-          <div
-            className={attribs.class}
-            style={{ backgroundColor: "white", color: "black" }}
+            className={attribs.class || ""}
+            style={{
+              backgroundColor: "white",
+              color: "black",
+              fontWeight: "bold",
+              cursor: "text",
+            }}
           >
             {renderFieldValue(attribs.name)}
           </div>
@@ -128,10 +117,9 @@ export default function Home() {
 
   const parsedHTML = parse(htmlSample, options);
 
-  const nodeRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     setRenderedElements(parent.current?.innerHTML);
-  }, [tapes]);
+  }, [inputs]);
 
   return (
     <div className="flex flex-col h-screen">
@@ -142,7 +130,7 @@ export default function Home() {
             className="flex flex-wrap w-[500px]  gap-[10px] mt-[20px]"
             ref={parent}
           >
-            {tapes.map((tape, index) => (
+            {inputs.map((tape, index) => (
               <React.Fragment key={index}>{tape}</React.Fragment>
             ))}
           </div>
