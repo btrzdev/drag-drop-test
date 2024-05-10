@@ -39,12 +39,14 @@ export default function Home() {
     getValues,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data: any) => setData(data);
+  const onSubmit = (data: any) => {
+    setIsOpen(true), setData(data);
+  };
   const [data, setData] = useState();
+  const [isOpen, setIsOpen] = useState(false);
 
-  const returningFieldValue = (name: string) => {
+  const renderFieldValue = (name: string) => {
     if (data) {
-      console.log("data", data[name]);
       return data[name];
     }
   };
@@ -97,7 +99,7 @@ export default function Home() {
             className={attribs.class}
             style={{ backgroundColor: "white", color: "black" }}
           >
-            {returningFieldValue(attribs.name)}
+            {renderFieldValue(attribs.name)}
           </div>
         );
       }
@@ -107,7 +109,7 @@ export default function Home() {
             className={`${attribs.class}`}
             style={{ backgroundColor: "white", color: "black" }}
           >
-            {returningFieldValue(attribs.name)}
+            {renderFieldValue(attribs.name)}
           </div>
         );
       }
@@ -117,7 +119,7 @@ export default function Home() {
             className={attribs.class}
             style={{ backgroundColor: "white", color: "black" }}
           >
-            {returningFieldValue(attribs.name)}
+            {renderFieldValue(attribs.name)}
           </div>
         );
       }
@@ -132,7 +134,7 @@ export default function Home() {
   }, [tapes]);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col h-screen">
       <div className="bg-gray-700 w-full h-full py-[100px] justify-center items-center flex flex-col">
         <h2 className="font-bold text-white">TECHNICAL DELEGATE REPORT</h2>
         <form onSubmit={handleSubmit(onSubmit)} className="">
@@ -154,6 +156,8 @@ export default function Home() {
         </form>
       </div>
       <Template
+        setIsOpen={setIsOpen}
+        isOpen={isOpen}
         parsedHTML={parsedHTML}
         documentType={"TECHNICAL DELEGATE REPORT"}
       />
